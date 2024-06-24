@@ -68,6 +68,10 @@ func (r *ExporterReconcile) resetPodCreateAttemptedStats(ctx context.Context) {
 					return false
 				}
 
+				if isTaskRunThrottled(&tr) {
+					return false
+				}
+
 				// reason and message will be set when MarkReasonOngoing called, which should occur on a create pod error;
 				// also see updateIncompleteTaskRunStatus for how Pod conditions are handled while in progress
 				con := tr.Status.GetCondition(apis.ConditionSucceeded)

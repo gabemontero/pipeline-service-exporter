@@ -59,6 +59,11 @@ func (r *ExporterReconcile) resetPipelineRunKickoffStats(ctx context.Context) {
 					return false
 				}
 
+				throttled, _, _ := isPipelineRunThrottled(&pr, r.client, context.Background())
+				if throttled {
+					return false
+				}
+
 				if len(pr.Status.ChildReferences) > 0 || len(pr.Status.SkippedTasks) > 0 {
 					return false
 				}
